@@ -1,0 +1,598 @@
+{
+  "manifest": {
+    "revision": "bundled",
+    "channel": "production",
+    "entry": "login",
+    "home": "home",
+    "sduiVersion": 1,
+    "screens": [
+      {
+        "id": "login",
+        "route": "login",
+        "title": "Đăng nhập",
+        "icon": "🔐",
+        "requiresAuth": false,
+        "showInMenu": false,
+        "version": 1,
+        "minSdui": 1
+      },
+      {
+        "id": "home",
+        "route": "home",
+        "title": "Trang chủ",
+        "icon": "🏠",
+        "requiresAuth": true,
+        "showInMenu": true,
+        "version": 1,
+        "minSdui": 1
+      },
+      {
+        "id": "profile",
+        "route": "profile",
+        "title": "Hồ sơ",
+        "icon": "👤",
+        "requiresAuth": true,
+        "showInMenu": true,
+        "version": 1,
+        "minSdui": 1
+      }
+    ]
+  },
+  "screens": {
+    "login": {
+      "id": "login",
+      "route": "login",
+      "title": "Đăng nhập",
+      "icon": "🔐",
+      "requiresAuth": false,
+      "showInMenu": false,
+      "version": 1,
+      "minSdui": 1,
+      "onLoad": [],
+      "initialState": {
+        "email": "demo@supper.app",
+        "password": "123456",
+        "loading": false,
+        "error": ""
+      },
+      "layout": {
+        "type": "Screen",
+        "props": {
+          "scroll": true,
+          "padding": 24,
+          "background": "#ffffff"
+        },
+        "children": [
+          {
+            "type": "Spacer",
+            "props": {
+              "size": 40
+            }
+          },
+          {
+            "type": "Text",
+            "props": {
+              "text": "💜",
+              "size": 56,
+              "align": "center"
+            }
+          },
+          {
+            "type": "Spacer",
+            "props": {
+              "size": 8
+            }
+          },
+          {
+            "type": "Heading",
+            "props": {
+              "text": "SupperPay",
+              "align": "center"
+            }
+          },
+          {
+            "type": "Caption",
+            "props": {
+              "text": "Màn hình này được tải từ server — sửa trên dashboard là app đổi ngay",
+              "align": "center"
+            }
+          },
+          {
+            "type": "Spacer",
+            "props": {
+              "size": 28
+            }
+          },
+          {
+            "type": "Input",
+            "props": {
+              "label": "Email",
+              "value": "{{state.email}}",
+              "placeholder": "demo@supper.app",
+              "keyboardType": "email-address"
+            },
+            "actions": {
+              "onChangeText": [
+                {
+                  "type": "setState",
+                  "path": "email",
+                  "value": "{{event.text}}"
+                }
+              ]
+            }
+          },
+          {
+            "type": "Input",
+            "props": {
+              "label": "Mật khẩu",
+              "value": "{{state.password}}",
+              "placeholder": "••••••",
+              "secure": true
+            },
+            "actions": {
+              "onChangeText": [
+                {
+                  "type": "setState",
+                  "path": "password",
+                  "value": "{{event.text}}"
+                }
+              ]
+            }
+          },
+          {
+            "type": "Banner",
+            "props": {
+              "text": "{{state.error}}",
+              "tone": "danger"
+            },
+            "if": "state.error"
+          },
+          {
+            "type": "Spacer",
+            "props": {
+              "size": 16
+            }
+          },
+          {
+            "type": "Button",
+            "props": {
+              "title": "Đăng nhập",
+              "loading": "{{state.loading}}"
+            },
+            "actions": {
+              "onPress": [
+                {
+                  "type": "setState",
+                  "path": "error",
+                  "value": ""
+                },
+                {
+                  "type": "setState",
+                  "path": "loading",
+                  "value": true
+                },
+                {
+                  "type": "http",
+                  "method": "POST",
+                  "url": "/api/auth/login",
+                  "body": {
+                    "email": "{{state.email}}",
+                    "password": "{{state.password}}"
+                  },
+                  "saveAs": "auth",
+                  "onError": [
+                    {
+                      "type": "setState",
+                      "path": "loading",
+                      "value": false
+                    },
+                    {
+                      "type": "setState",
+                      "path": "error",
+                      "value": "{{error.message}}"
+                    }
+                  ]
+                },
+                {
+                  "type": "setState",
+                  "path": "loading",
+                  "value": false
+                },
+                {
+                  "type": "setAuth",
+                  "from": "state.auth"
+                },
+                {
+                  "type": "navigate",
+                  "to": "home",
+                  "reset": true
+                }
+              ]
+            }
+          },
+          {
+            "type": "Spacer",
+            "props": {
+              "size": 12
+            }
+          },
+          {
+            "type": "Caption",
+            "props": {
+              "text": "demo@supper.app / 123456",
+              "align": "center"
+            }
+          }
+        ]
+      },
+      "updatedAt": "2026-09-12T03:19:24.585Z"
+    },
+    "home": {
+      "id": "home",
+      "route": "home",
+      "title": "Trang chủ",
+      "icon": "🏠",
+      "requiresAuth": true,
+      "showInMenu": true,
+      "version": 1,
+      "minSdui": 1,
+      "onLoad": [
+        {
+          "type": "http",
+          "method": "GET",
+          "url": "/api/home/summary",
+          "saveAs": "home"
+        }
+      ],
+      "initialState": {},
+      "layout": {
+        "type": "Screen",
+        "props": {
+          "scroll": true,
+          "background": "#f4f4f7",
+          "refreshable": true
+        },
+        "children": [
+          {
+            "type": "View",
+            "props": {
+              "background": "#a50064",
+              "padding": 20,
+              "paddingTop": 16,
+              "radiusBottom": 24
+            },
+            "children": [
+              {
+                "type": "Row",
+                "props": {
+                  "align": "center",
+                  "gap": 12
+                },
+                "children": [
+                  {
+                    "type": "Avatar",
+                    "props": {
+                      "emoji": "{{user.avatar}}"
+                    }
+                  },
+                  {
+                    "type": "View",
+                    "props": {
+                      "flex": 1
+                    },
+                    "children": [
+                      {
+                        "type": "Text",
+                        "props": {
+                          "text": "Xin chào,",
+                          "color": "#f0c8e0",
+                          "size": 13
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "props": {
+                          "text": "{{user.name}}",
+                          "color": "#ffffff",
+                          "size": 18,
+                          "weight": "bold"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Badge",
+                    "props": {
+                      "text": "{{user.tier}}"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "Spacer",
+                "props": {
+                  "size": 18
+                }
+              },
+              {
+                "type": "Text",
+                "props": {
+                  "text": "Số dư khả dụng",
+                  "color": "#f0c8e0",
+                  "size": 13
+                }
+              },
+              {
+                "type": "Text",
+                "props": {
+                  "text": "{{state.home.balance | currency}}",
+                  "color": "#ffffff",
+                  "size": 30,
+                  "weight": "bold"
+                }
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": {
+              "margin": 16
+            },
+            "children": [
+              {
+                "type": "Text",
+                "props": {
+                  "text": "Dịch vụ",
+                  "size": 15,
+                  "weight": "bold"
+                }
+              },
+              {
+                "type": "Spacer",
+                "props": {
+                  "size": 12
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "columns": 4
+                },
+                "children": [
+                  {
+                    "type": "ServiceIcon",
+                    "repeat": {
+                      "items": "state.home.services",
+                      "as": "svc"
+                    },
+                    "props": {
+                      "emoji": "{{svc.emoji}}",
+                      "label": "{{svc.label}}",
+                      "color": "{{svc.color}}"
+                    },
+                    "actions": {
+                      "onPress": [
+                        {
+                          "type": "toast",
+                          "title": "{{svc.label}}",
+                          "message": "Mini-app \"{{svc.label}}\" sẽ mở ở đây"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": {
+              "margin": 16,
+              "marginTop": 0
+            },
+            "children": [
+              {
+                "type": "Text",
+                "props": {
+                  "text": "Giao dịch gần đây",
+                  "size": 15,
+                  "weight": "bold"
+                }
+              },
+              {
+                "type": "Spacer",
+                "props": {
+                  "size": 4
+                }
+              },
+              {
+                "type": "ListItem",
+                "repeat": {
+                  "items": "state.home.transactions",
+                  "as": "tx"
+                },
+                "props": {
+                  "emoji": "{{tx.emoji}}",
+                  "title": "{{tx.title}}",
+                  "subtitle": "{{tx.time}}",
+                  "value": "{{tx.amount | signedCurrency}}",
+                  "valueColor": "{{tx.color}}"
+                }
+              },
+              {
+                "type": "Caption",
+                "props": {
+                  "text": "Chưa có giao dịch nào"
+                },
+                "if": "!state.home.transactions"
+              }
+            ]
+          },
+          {
+            "type": "View",
+            "props": {
+              "padding": 16,
+              "paddingTop": 0
+            },
+            "children": [
+              {
+                "type": "Button",
+                "props": {
+                  "title": "Xem hồ sơ",
+                  "variant": "secondary"
+                },
+                "actions": {
+                  "onPress": [
+                    {
+                      "type": "navigate",
+                      "to": "profile"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "Spacer",
+            "props": {
+              "size": 24
+            }
+          }
+        ]
+      },
+      "updatedAt": "2026-09-12T03:19:24.585Z"
+    },
+    "profile": {
+      "id": "profile",
+      "route": "profile",
+      "title": "Hồ sơ",
+      "icon": "👤",
+      "requiresAuth": true,
+      "showInMenu": true,
+      "version": 1,
+      "minSdui": 1,
+      "onLoad": [],
+      "initialState": {},
+      "layout": {
+        "type": "Screen",
+        "props": {
+          "scroll": true,
+          "background": "#f4f4f7"
+        },
+        "children": [
+          {
+            "type": "View",
+            "props": {
+              "padding": 24,
+              "align": "center",
+              "background": "#ffffff"
+            },
+            "children": [
+              {
+                "type": "Avatar",
+                "props": {
+                  "emoji": "{{user.avatar}}",
+                  "size": 72
+                }
+              },
+              {
+                "type": "Spacer",
+                "props": {
+                  "size": 12
+                }
+              },
+              {
+                "type": "Text",
+                "props": {
+                  "text": "{{user.name}}",
+                  "size": 20,
+                  "weight": "bold"
+                }
+              },
+              {
+                "type": "Caption",
+                "props": {
+                  "text": "{{user.email}}"
+                }
+              }
+            ]
+          },
+          {
+            "type": "Spacer",
+            "props": {
+              "size": 16
+            }
+          },
+          {
+            "type": "Card",
+            "props": {
+              "margin": 16,
+              "marginTop": 0
+            },
+            "children": [
+              {
+                "type": "ListItem",
+                "props": {
+                  "emoji": "📱",
+                  "title": "Số điện thoại",
+                  "value": "{{user.phone}}"
+                }
+              },
+              {
+                "type": "Divider"
+              },
+              {
+                "type": "ListItem",
+                "props": {
+                  "emoji": "💎",
+                  "title": "Hạng thành viên",
+                  "value": "{{user.tier}}"
+                }
+              },
+              {
+                "type": "Divider"
+              },
+              {
+                "type": "ListItem",
+                "props": {
+                  "emoji": "🆔",
+                  "title": "User ID",
+                  "value": "{{user.id}}"
+                }
+              }
+            ]
+          },
+          {
+            "type": "View",
+            "props": {
+              "padding": 16,
+              "paddingTop": 0
+            },
+            "children": [
+              {
+                "type": "Button",
+                "props": {
+                  "title": "Đăng xuất",
+                  "variant": "danger"
+                },
+                "actions": {
+                  "onPress": [
+                    {
+                      "type": "logout"
+                    },
+                    {
+                      "type": "navigate",
+                      "to": "login",
+                      "reset": true
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "updatedAt": "2026-09-12T03:19:24.585Z"
+    }
+  }
+}

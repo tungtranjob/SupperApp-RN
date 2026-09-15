@@ -1,0 +1,29 @@
+node_modules/
+dist/
+.expo/
+.DS_Store
+*.log
+
+# Dữ liệu chạy của backend (sinh ra lúc chạy, không phải mã nguồn)
+backend/data/
+
+# Bundle mini-app đã ký. Sinh bởi `npm run mini:build` + `mini:publish`.
+# KHÔNG commit: chúng là artefact build, và nặng vài trăm KB mỗi version.
+backend/mini-bundles/
+mini-apps/*/build/
+
+# KHOÁ RIÊNG dùng để ký mini-app. Commit là mất trắng mô hình bảo mật:
+# ai có khoá riêng là ký được bundle mà app vỏ sẽ tin.
+# Khoá CÔNG (*.pem.pub) thì commit — nó không bí mật, và app vỏ cần nó.
+keys/*.pem
+!keys/*.pem.pub
+
+# Thư mục native do `expo prebuild` sinh ra. Tái tạo được bất cứ lúc nào:
+#   cd mobile && npx expo prebuild --platform ios
+# Cấu hình Re.Pack không nằm trong đó mà nằm ở mobile/plugins/withRepack.js,
+# nên xoá đi cũng không mất gì.
+mobile/ios/
+mobile/android/
+
+# Output bundle của Re.Pack/Rspack cho app vỏ. Sinh lại mỗi lần build.
+mobile/build/

@@ -1,0 +1,8 @@
+{
+  "name": "@supper/mini-sdk",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hợp đồng giữa app vỏ (host) và mini-app. CHỈ CÓ KIỂU, không có mã chạy.",
+  "types": "index.ts",
+  "main": "index.ts"
+}

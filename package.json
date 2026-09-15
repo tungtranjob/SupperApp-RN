@@ -1,0 +1,26 @@
+{
+  "name": "supper-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Super app React Native: giao diện điều khiển từ xa (hướng A) + mini-app remote bundle thật (hướng B)",
+  "workspaces": [
+    "packages/*",
+    "mini-apps/*"
+  ],
+  "scripts": {
+    "test": "node tools/sdui-bind.test.mjs && node tools/shared-deps.test.mjs && node tools/mini-registry.test.mjs && node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON tools/mini-bridge.test.mjs && node tools/mini-signing.test.mjs && npm --prefix dashboard test",
+    "backend": "npm --prefix backend run dev",
+    "dashboard": "npm --prefix dashboard run dev",
+    "start": "npm --prefix mobile run start",
+    "ios": "npm --prefix mobile run ios",
+    "android": "npm --prefix mobile run android",
+    "keys:gen": "node tools/keys-gen.mjs",
+    "keys:sync": "node tools/keys-sync.mjs",
+    "mini:build": "node tools/mini-build.mjs",
+    "mini:publish": "node tools/mini-publish.mjs",
+    "mini:release": "node tools/mini-release.mjs",
+    "install:all": "npm install && npm --prefix backend install && npm --prefix dashboard install && npm --prefix mobile install",
+    "export:bundled": "npm --prefix backend run export:bundled",
+    "typecheck": "npx tsc -p mobile --noEmit && npx tsc -p mini-apps/insurance --noEmit && npx tsc -p mini-apps/invest --noEmit && npx tsc -p packages/mini-sdk --noEmit"
+  }
+}

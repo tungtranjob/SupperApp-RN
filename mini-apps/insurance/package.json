@@ -1,0 +1,35 @@
+{
+  "name": "@supper/mini-insurance",
+  "version": "1.6.0",
+  "private": true,
+  "description": "Mini-app Bảo hiểm — remote container 'miniInsurance', do đội team-insurance phát hành",
+  "main": "src/index.ts",
+  "supperMiniApp": {
+    "id": "insurance",
+    "container": "miniInsurance",
+    "keyId": "team-insurance",
+    "minHostVersion": 1,
+    "permissions": [
+      "home.summary",
+      "insurance.quote"
+    ]
+  },
+  "dependencies": {
+    "@supper/mini-sdk": "*"
+  },
+  "devDependencies": {
+    "@callstack/repack": "5.4.0-canary-20260831210904",
+    "@module-federation/enhanced": "2.8.1",
+    "@react-native-community/cli": "^20.2.0",
+    "@react-native/babel-preset": "0.86.3",
+    "@rspack/core": "^1.7.12",
+    "@swc/helpers": "^0.5.0",
+    "@types/react": "~19.2.2",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "typescript": "~6.0.3"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}
